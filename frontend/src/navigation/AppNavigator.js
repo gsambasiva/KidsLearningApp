@@ -24,6 +24,11 @@ import QuizScreen from '../screens/child/QuizScreen';
 import ResultScreen from '../screens/child/ResultScreen';
 import LeaderboardScreen from '../screens/child/LeaderboardScreen';
 
+// Reading Module Screens
+import ReadingStoriesScreen from '../screens/child/ReadingStoriesScreen';
+import ReadingStoryScreen from '../screens/child/ReadingStoryScreen';
+import ReadingQuizScreen from '../screens/child/ReadingQuizScreen';
+
 // Parent Screens
 import ParentDashboard from '../screens/parent/ParentDashboard';
 import ManageChildrenScreen from '../screens/parent/ManageChildrenScreen';
@@ -51,6 +56,14 @@ const ChildStack = () => (
     />
     <Stack.Screen name="Result" component={ResultScreen} />
     <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
+    {/* ── Reading Module ── */}
+    <Stack.Screen name="ReadingStories" component={ReadingStoriesScreen} />
+    <Stack.Screen name="ReadingStory"   component={ReadingStoryScreen} />
+    <Stack.Screen
+      name="ReadingQuiz"
+      component={ReadingQuizScreen}
+      options={{ gestureEnabled: false }}
+    />
   </Stack.Navigator>
 );
 

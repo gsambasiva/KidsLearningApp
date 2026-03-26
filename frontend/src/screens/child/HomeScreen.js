@@ -55,7 +55,8 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const handleSubjectPress = (subject) => {
-    navigation.navigate('GradeSelection', { subject });
+    // Pass the ID string so every downstream screen can compare subject === 'math' reliably
+    navigation.navigate('GradeSelection', { subject: subject.id || subject });
   };
 
   const handleQuickChallenge = (challenge) => {

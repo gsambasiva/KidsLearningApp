@@ -22,7 +22,11 @@ const GRADES = [
 ];
 
 const GradeSelectionScreen = ({ navigation, route }) => {
-  const { subject } = route.params || {};
+  const { subject: rawSubject } = route.params || {};
+  // Normalise: may arrive as string 'math' or legacy object {id:'math',...}
+  const subject = (rawSubject && typeof rawSubject === 'object')
+    ? (rawSubject.id || 'math')
+    : (rawSubject || 'math');
   const { currentGrade, setCurrentGrade } = useAppContext();
   const animations = GRADES.map(() => useRef(new Animated.Value(1)).current);
 

@@ -77,7 +77,13 @@ const DIFFICULTIES = [
 ];
 
 const TopicSelectionScreen = ({ navigation, route }) => {
-  const { subject, grade } = route.params || {};
+  const { subject: rawSubject, grade } = route.params || {};
+
+  // Normalise: subject may arrive as a string ('math') or a legacy object ({id:'math',...})
+  const subject = (rawSubject && typeof rawSubject === 'object')
+    ? (rawSubject.id || 'math')
+    : (rawSubject || 'math');
+
   const topics = subject === 'math'
     ? (MATH_TOPICS[grade] || MATH_TOPICS['3'])
     : (READING_TOPICS[grade] || READING_TOPICS['3']);
@@ -87,6 +93,18 @@ const TopicSelectionScreen = ({ navigation, route }) => {
 
   const handleStart = () => {
     if (!selectedTopic) return;
+
+    // ── Reading topics → Reading Module ──────────────────────────────────────
+    if (subject === 'reading') {
+      navigation.navigate('ReadingStories', {
+        grade,
+        topic: selectedTopic.id,
+        subject: 'reading',
+      });
+      return;
+    }
+
+    // ── Math/other topics → Quiz Screen ──────────────────────────────────────
     navigation.navigate('Quiz', {
       subject,
       grade,
