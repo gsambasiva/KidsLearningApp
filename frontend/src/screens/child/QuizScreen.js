@@ -14,6 +14,7 @@ import QuizTimer from '../../components/quiz/QuizTimer';
 import MultipleChoice from '../../components/quiz/MultipleChoice';
 import FillInBlank from '../../components/quiz/FillInBlank';
 import ProgressBar from '../../components/common/ProgressBar';
+import { StarsBurst, CorrectFlash, WrongFlash, useShakeAnimation } from '../../components/animations/CelebrationEffect';
 import { quizService } from '../../services/quizService';
 import { useAppContext } from '../../context/AppContext';
 import { calculateXP, calculateStars, calculateCoins, checkBadges } from '../../utils/adaptive';
@@ -38,6 +39,10 @@ const QuizScreen = ({ navigation, route }) => {
 
   const feedbackAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
+  const starsRef = useRef(null);
+  const correctFlashRef = useRef(null);
+  const wrongFlashRef = useRef(null);
+  const [shakeAnim, triggerShake] = useShakeAnimation();
 
   // Prevent going back mid-quiz
   useEffect(() => {
@@ -95,6 +100,15 @@ const QuizScreen = ({ navigation, route }) => {
     setSelectedAnswer(answer);
     setTimerRunning(false);
     setShowFeedback(true);
+
+    // Trigger celebration or shake
+    if (isCorrect) {
+      if (correctFlashRef.current) correctFlashRef.current.flash();
+      if (starsRef.current) starsRef.current.burst();
+    } else {
+      if (wrongFlashRef.current) wrongFlashRef.current.flash();
+      triggerShake();
+    }
 
     // Record answer
     setAnswers(prev => [...prev, {
@@ -264,7 +278,7 @@ const QuizScreen = ({ navigation, route }) => {
 
       {/* Question Area */}
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.questionArea}>
-        <Animated.View style={{ transform: [{ translateX: slideAnim }] }}>
+        <Animated.View style={{ transform: [{ translateX: slideAnim }, { translateX: shakeAnim }] }}>
 
           {/* Question Number */}
           <View style={styles.qNumRow}>
@@ -333,6 +347,11 @@ const QuizScreen = ({ navigation, route }) => {
           <View key={`empty_${i}`} style={styles.scoreDotEmpty} />
         ))}
       </View>
+
+      {/* ── Celebration overlays (rendered last so they appear on top) ── */}
+      <StarsBurst ref={starsRef} />
+      <CorrectFlash ref={correctFlashRef} />
+      <WrongFlash ref={wrongFlashRef} />
     </SafeAreaView>
   );
 };

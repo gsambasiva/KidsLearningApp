@@ -29,6 +29,9 @@ import ReadingStoriesScreen from '../screens/child/ReadingStoriesScreen';
 import ReadingStoryScreen from '../screens/child/ReadingStoryScreen';
 import ReadingQuizScreen from '../screens/child/ReadingQuizScreen';
 
+// Animated Lesson Screen
+import LessonScreen from '../screens/child/LessonScreen';
+
 // Parent Screens
 import ParentDashboard from '../screens/parent/ParentDashboard';
 import ManageChildrenScreen from '../screens/parent/ManageChildrenScreen';
@@ -64,6 +67,8 @@ const ChildStack = () => (
       component={ReadingQuizScreen}
       options={{ gestureEnabled: false }}
     />
+    {/* ── Animated Lesson Module ── */}
+    <Stack.Screen name="Lesson" component={LessonScreen} />
   </Stack.Navigator>
 );
 

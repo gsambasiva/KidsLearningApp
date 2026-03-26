@@ -115,6 +115,17 @@ const TopicSelectionScreen = ({ navigation, route }) => {
     });
   };
 
+  const handleLearnFirst = () => {
+    if (!selectedTopic) return;
+    navigation.navigate('Lesson', {
+      subject,
+      grade,
+      topic: selectedTopic.id,
+      topicName: selectedTopic.name,
+      difficulty: selectedDifficulty,
+    });
+  };
+
   return (
     <SafeAreaView style={styles.safe}>
       <LinearGradient
@@ -175,14 +186,28 @@ const TopicSelectionScreen = ({ navigation, route }) => {
           ))}
         </View>
 
-        {/* Start Button */}
+        {/* Learn First Button */}
+        <TouchableOpacity
+          style={[styles.learnBtn, !selectedTopic && styles.startBtnDisabled]}
+          onPress={handleLearnFirst}
+          disabled={!selectedTopic}
+        >
+          <Text style={styles.learnBtnText}>
+            {selectedTopic ? `🎬 Learn First!` : 'Select a topic first'}
+          </Text>
+          {selectedTopic && (
+            <Text style={styles.learnBtnSub}>Watch animated lesson before quiz</Text>
+          )}
+        </TouchableOpacity>
+
+        {/* Start Quiz Button */}
         <TouchableOpacity
           style={[styles.startBtn, !selectedTopic && styles.startBtnDisabled]}
           onPress={handleStart}
           disabled={!selectedTopic}
         >
           <Text style={styles.startBtnText}>
-            {selectedTopic ? `Start Quiz! 🚀` : 'Select a topic first'}
+            {selectedTopic ? `🚀 Start Quiz Directly` : 'Select a topic first'}
           </Text>
         </TouchableOpacity>
 
@@ -235,14 +260,23 @@ const styles = StyleSheet.create({
   diffEmoji: { fontSize: 22, marginBottom: 4 },
   diffLabel: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
   diffLabelSelected: { color: Colors.white },
+  learnBtn: {
+    backgroundColor: '#FF6F00', borderRadius: 28,
+    paddingVertical: 16, alignItems: 'center',
+    shadowColor: '#FF6F00', shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35, shadowRadius: 12, elevation: 6,
+    marginBottom: 12,
+  },
+  learnBtnText: { fontSize: 20, fontWeight: '800', color: Colors.white },
+  learnBtnSub: { fontSize: 12, color: 'rgba(255,255,255,0.85)', marginTop: 2 },
   startBtn: {
     backgroundColor: Colors.primary, borderRadius: 28,
-    paddingVertical: 18, alignItems: 'center',
-    shadowColor: Colors.primary, shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35, shadowRadius: 12, elevation: 6,
+    paddingVertical: 16, alignItems: 'center',
+    shadowColor: Colors.primary, shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25, shadowRadius: 8, elevation: 4,
   },
   startBtnDisabled: { backgroundColor: Colors.border },
-  startBtnText: { fontSize: 20, fontWeight: '800', color: Colors.white },
+  startBtnText: { fontSize: 17, fontWeight: '700', color: Colors.white },
 });
 
 export default TopicSelectionScreen;
